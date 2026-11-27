@@ -9,6 +9,8 @@ const layout = byId('layout')
 const sidebar = byId('sidebar')
 const history = byId('history')
 const historyToggle = byId('history-toggle')
+const deleteDialog = byId('delete-dialog')
+const deleteDescription = byId('delete-description')
 const connection = byId('connection')
 const connectionToggle = byId('connection-toggle')
 const scrim = byId('scrim')
@@ -44,6 +46,7 @@ const storage = {
 const threads = storage.read('threads', [])
 const savedId = storage.read('current', null)
 let currentId = threads.some(thread => thread.id === savedId) ? savedId : null
+let threadToDelete = null
 let config = null
 let running = null
 let liveContent = null
@@ -261,6 +264,7 @@ function dismissDrawer() {
 }
 scrim.addEventListener('click', dismissDrawer)
 document.addEventListener('keydown', event => {
+  if (deleteDialog.open) return
   if (event.key === 'Escape' && (!scrim.hidden || connection.contains(document.activeElement))) dismissDrawer()
 })
 drawerScreen.addEventListener('change', () => showSettings(!drawerScreen.matches && !config))
@@ -297,32 +301,45 @@ function renderHistory() {
     remove.type = 'button'
     remove.title = '删除对话'
     remove.setAttribute('aria-label', `删除对话：${thread.title}`)
+    remove.setAttribute('aria-haspopup', 'dialog')
     remove.append(makeIcon('trash'))
     remove.addEventListener('click', () => {
-      if (savingAttachments) return
-      if (!window.confirm(`删除「${thread.title}」？`)) return
-      if (running?.id === thread.id) running.controller.abort()
-      threads.splice(threads.indexOf(thread), 1)
-      errors.delete(thread.id)
-      drafts.delete(thread.id)
-      attachmentDrafts.delete(thread.id)
-      if (thread.id === currentId) {
-        currentId = null
-        openThread(null)
-      } else {
-        rememberThreads()
-        renderHistory()
-        byId('new-chat').focus()
-      }
-      const fileIds = thread.messages.flatMap(message => (message.files ?? []).map(file => file.id))
-      void deleteFiles(fileIds).catch(() => {
-        sidebar.querySelector('.sidebar-footer div > span').textContent = '部分本地附件清理失败'
-      })
+      if (savingAttachments || threadToDelete) return
+      threadToDelete = thread
+      deleteDescription.textContent = `删除「${thread.title}」后，聊天记录和附件将无法恢复。`
+      deleteDialog.returnValue = ''
+      deleteDialog.showModal()
     })
     entry.append(select, remove)
     history.append(entry)
   }
 }
+
+deleteDialog.addEventListener('close', () => {
+  const thread = threadToDelete
+  threadToDelete = null
+  if (deleteDialog.returnValue !== 'delete' || savingAttachments) return
+  const index = threads.indexOf(thread)
+  if (index === -1) return
+
+  if (running?.id === thread.id) running.controller.abort()
+  threads.splice(index, 1)
+  errors.delete(thread.id)
+  drafts.delete(thread.id)
+  attachmentDrafts.delete(thread.id)
+  if (thread.id === currentId) {
+    currentId = null
+    openThread(null)
+  } else {
+    rememberThreads()
+    renderHistory()
+    byId('new-chat').focus()
+  }
+  const fileIds = thread.messages.flatMap(message => (message.files ?? []).map(file => file.id))
+  void deleteFiles(fileIds).catch(() => {
+    sidebar.querySelector('.sidebar-footer div > span').textContent = '部分本地附件清理失败'
+  })
+})
 
 function openThread(id, select) {
   if (savingAttachments) return

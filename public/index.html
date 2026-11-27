@@ -125,5 +125,13 @@
     </aside>
     <button type="button" class="scrim" id="scrim" aria-label="关闭面板" hidden></button>
   </div>
+  <dialog class="delete-dialog" id="delete-dialog" aria-labelledby="delete-title" aria-describedby="delete-description">
+    <h2 id="delete-title">删除对话？</h2>
+    <p id="delete-description"></p>
+    <form class="delete-actions" method="dialog">
+      <button type="submit" value="cancel" autofocus>取消</button>
+      <button type="submit" value="delete" class="delete-confirm">删除</button>
+    </form>
+  </dialog>
 </body>
 </html>
