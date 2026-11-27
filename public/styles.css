@@ -264,10 +264,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
 .sidebar-footer div > span { color: #7d8ba0; }
 
 .workspace {
-  background:
-    radial-gradient(circle at 80% 8%, #dcecff9e, transparent 29%),
-    radial-gradient(circle at 7% 90%, #e8f3ff91, transparent 31%),
-    linear-gradient(180deg, #f8fbff 0%, #f1f6fb 100%);
+  background: #fff;
 }
 .workspace-header { border-bottom-color: #dce6f1; background: #ffffffc9; backdrop-filter: blur(14px); }
 .workspace-heading .icon { color: #1677ff; }
