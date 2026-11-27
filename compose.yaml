@@ -1,0 +1,29 @@
+services:
+  ximu-chat:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${XIMU_CHAT_PORT:-8768}:4173"
+    environment:
+      XIMU_CHAT_PUBLIC_ORIGIN: ${XIMU_CHAT_PUBLIC_ORIGIN:-https://chat.ximuai.com,https://codex.ximuai.com}
+      XIMU_CHAT_UPSTREAM_API_URL: ${XIMU_CHAT_UPSTREAM_API_URL:-https://codex.ximuai.com}
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - >-
+          const { request } = require('node:http');
+          const origin = new URL(process.env.XIMU_CHAT_PUBLIC_ORIGIN.split(',').find(value => value.trim()));
+          const check = request({ host: '127.0.0.1', port: process.env.PORT, method: 'HEAD',
+          headers: { Host: origin.host } }, response => { response.resume();
+          process.exitCode = response.statusCode === 200 ? 0 : 1 });
+          check.on('error', () => { process.exitCode = 1 }); check.end();
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s

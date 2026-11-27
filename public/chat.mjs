@@ -1,6 +1,6 @@
-import { marked } from '/vendor/marked.js'
-import DOMPurify from '/vendor/purify.js'
-import { chatEndpoint } from '/endpoint.mjs'
+import { marked } from './vendor/marked.js'
+import DOMPurify from './vendor/purify.js'
+import { chatEndpoint } from './endpoint.mjs'
 import { acceptedFileTypes, deleteFiles, fileType, messagesWithFiles, saveFiles } from './attachments.mjs'
 import { CHAT_SIZE_ERROR, MAX_CHAT_BYTES, MAX_FILE_BYTES, MAX_MESSAGE_FILE_BYTES, MAX_MESSAGE_FILES } from './attachment-limits.mjs'
 
@@ -623,7 +623,7 @@ async function requestReply(thread, settings) {
     const messages = await messagesWithFiles(thread.messages)
     const body = JSON.stringify({ url: settings.url, model: settings.model, messages })
     if (new Blob([body]).size > MAX_CHAT_BYTES) throw new Error(CHAT_SIZE_ERROR)
-    const response = await fetch('/api/chat', {
+    const response = await fetch('./api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${settings.key}` },
       body,

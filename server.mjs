@@ -5,8 +5,32 @@ import { pipeline } from 'node:stream/promises'
 import { chatEndpoint } from './endpoint.mjs'
 import { CHAT_SIZE_ERROR, MAX_CHAT_BYTES } from './public/attachment-limits.mjs'
 
-const host = '127.0.0.1'
+const host = process.env.XIMU_CHAT_HOST ?? '127.0.0.1'
 const port = Number(process.env.PORT ?? 4173)
+const publicOrigins = new Map()
+for (const value of (process.env.XIMU_CHAT_PUBLIC_ORIGIN ?? '').split(',')) {
+  if (!value.trim()) continue
+  const origin = new URL(value.trim())
+  if (origin.protocol !== 'https:' || origin.href !== `${origin.origin}/`) {
+    throw new Error('XIMU_CHAT_PUBLIC_ORIGIN 只能包含 HTTPS 源地址。')
+  }
+  publicOrigins.set(origin.host, origin.origin)
+}
+const publicDeployment = publicOrigins.size > 0
+const upstreamApiUrl = process.env.XIMU_CHAT_UPSTREAM_API_URL ?? 'https://codex.ximuai.com'
+
+if (!publicDeployment && host !== '127.0.0.1') {
+  throw new Error('监听容器或服务器网络时需要设置 XIMU_CHAT_PUBLIC_ORIGIN。')
+}
+if (publicDeployment && new URL(upstreamApiUrl).protocol !== 'https:') {
+  throw new Error('XIMU_CHAT_UPSTREAM_API_URL 必须使用 HTTPS。')
+}
+
+const allowedUpstreamEndpoints = publicDeployment ? new Set([
+  chatEndpoint(upstreamApiUrl).url,
+  chatEndpoint(upstreamApiUrl, true).url,
+]) : null
+
 const assets = new Map([
   ['/', ['public/index.html', 'text/html; charset=utf-8']],
   ['/styles.css', ['public/styles.css', 'text/css; charset=utf-8']],
@@ -104,6 +128,9 @@ async function chat(request, response) {
   } catch {
     throw new HttpError(400, '请输入有效的 HTTP 或 HTTPS API URL。')
   }
+  if (allowedUpstreamEndpoints && !allowedUpstreamEndpoints.has(endpoint.url)) {
+    throw new HttpError(403, '服务器版仅支持站点配置的 API 地址，请检查连接设置。')
+  }
 
   const disconnect = new AbortController()
   if (response.destroyed) return
@@ -167,10 +194,15 @@ const server = createServer(async (request, response) => {
 
   const authority = request.headers.host
   const localPort = server.address().port
-  if (![`${host}:${localPort}`, `localhost:${localPort}`].includes(authority) ||
-      (request.headers.origin && request.headers.origin !== `http://${authority}`) ||
-      request.headers['sec-fetch-site'] === 'cross-site') {
-    return sendJson(response, 403, '请从本地地址打开西牧chat。')
+  const localAuthorities = [`${host}:${localPort}`, `localhost:${localPort}`]
+  const expectedOrigin = publicDeployment
+    ? publicOrigins.get(authority)
+    : (localAuthorities.includes(authority) ? `http://${authority}` : null)
+  const blockedCrossSite = request.headers['sec-fetch-site'] === 'cross-site' &&
+    (!publicDeployment || request.method === 'POST')
+  if (!expectedOrigin || (request.headers.origin && request.headers.origin !== expectedOrigin) ||
+      blockedCrossSite) {
+    return sendJson(response, 403, '请使用此部署配置的访问地址打开西牧chat。')
   }
 
   try {

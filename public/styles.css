@@ -24,7 +24,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
 .icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 .icon-button { display: grid; width: 36px; height: 36px; place-items: center; padding: 0; border: 0; border-radius: 9px; background: transparent; color: #52665d; }
 .icon-button:hover { background: #edf2ed; color: #183c2c; }
-.logo { display: block; width: 25px; height: 25px; background: currentColor; mask: url('/ximu-chat-logo.png') center / contain no-repeat; }
+.logo { display: block; width: 25px; height: 25px; background: currentColor; mask: url('./ximu-chat-logo.png') center / contain no-repeat; }
 .layout { display: flex; height: 100vh; height: 100dvh; overflow: hidden; }
 
 .sidebar { width: var(--sidebar-width); flex: none; display: flex; flex-direction: column; padding: 30px 19px 19px; background: var(--pine); color: #ebf4ed; }
@@ -354,7 +354,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
 }
 
 .logo {
-  background: url('/chat-logo.svg') center / contain no-repeat;
+  background: url('./chat-logo.svg') center / contain no-repeat;
   -webkit-mask: none;
   mask: none;
 }

@@ -13,6 +13,12 @@ npm start
 
 打开 [http://127.0.0.1:4173](http://127.0.0.1:4173)。如需更换端口，在运行 `npm start` 前设置 `$env:PORT = '4180'`。服务仅监听本机的 `127.0.0.1`。
 
+## Docker 部署
+
+在服务器上的项目目录运行 `docker compose up -d --build --wait`。默认将容器发布到宿主机的 `127.0.0.1:8768`。`deploy/nginx-chat.ximuai.com.conf` 用于独立域名 [chat.ximuai.com](https://chat.ximuai.com/)，使用该域名的证书。
+
+用 Compose 环境变量 `XIMU_CHAT_PUBLIC_ORIGIN` 设置页面的 HTTPS 源地址，多个地址用逗号分隔。`XIMU_CHAT_UPSTREAM_API_URL` 设置允许转发的 API 基础地址，默认为 `https://codex.ximuai.com`。修改 `XIMU_CHAT_PORT` 时，请同步调整 Nginx 的 `proxy_pass`。
+
 ## 使用
 
 1. 「连接设置」的 API URL 默认填入 `https://codex.ximuai.com`，也可以改成其他基础地址或以 `/chat/completions`、`/responses` 结尾的完整地址。只填域名时使用 `/v1` 作为基础路径。
