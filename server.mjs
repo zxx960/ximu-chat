@@ -172,7 +172,7 @@ const server = createServer(async (request, response) => {
   if (![`${host}:${localPort}`, `localhost:${localPort}`].includes(authority) ||
       (request.headers.origin && request.headers.origin !== `http://${authority}`) ||
       request.headers['sec-fetch-site'] === 'cross-site') {
-    return sendJson(response, 403, '请从本地地址打开西牧对话。')
+    return sendJson(response, 403, '请从本地地址打开西牧chat。')
   }
 
   try {
@@ -201,5 +201,5 @@ server.on('error', error => {
   process.exitCode = 1
 })
 server.listen(port, host, () => {
-  console.log(`西牧对话 · http://${host}:${server.address().port}`)
+  console.log(`西牧chat · http://${host}:${server.address().port}`)
 })

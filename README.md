@@ -1,4 +1,4 @@
-# 西牧对话
+# 西牧chat
 
 本地聊天工作台，可手动填写 OpenAI 兼容 API 地址、API Key 和模型 ID。
 

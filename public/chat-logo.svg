@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title">
-  <title id="title">西牧对话</title>
+  <title id="title">西牧chat</title>
   <defs>
     <linearGradient id="bubble-gradient" x1="42" y1="26" x2="218" y2="224" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#43b7ff"/>

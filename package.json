@@ -1,7 +1,7 @@
 {
   "name": "ximu-chat",
   "version": "1.0.0",
-  "description": "西牧对话 - 本地 API 聊天工作台",
+  "description": "西牧chat - 本地 API 聊天工作台",
   "scripts": {
     "start": "node server.mjs"
   },

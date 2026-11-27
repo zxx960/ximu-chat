@@ -254,7 +254,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
 .history-heading { color: #77869b; }
 .history-empty { color: #8492a5; }
 .history-entry:hover, .history-entry:focus-within { background: #edf5ff; }
-.history-entry.active { background: #e2f0ff; box-shadow: inset 3px 0 #1677ff; }
+.history-entry.active { background: #e2f0ff; }
 .history-select { color: #263854; }
 .history-delete { color: #8290a4; }
 .history-delete:hover { background: #d9eaff; color: #0f62d6; }
