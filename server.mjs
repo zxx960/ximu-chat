@@ -108,8 +108,7 @@ async function chat(request, response) {
   const disconnect = new AbortController()
   if (response.destroyed) return
   response.once('close', () => disconnect.abort())
-  const timeout = AbortSignal.timeout(5 * 60_000)
-  const signal = AbortSignal.any([disconnect.signal, timeout])
+  const { signal } = disconnect
   const body = { model: model.trim(), stream: true }
   if (endpoint.responses) {
     body.input = messages.map(toResponsesMessage)
@@ -132,8 +131,7 @@ async function chat(request, response) {
       signal,
     })
   } catch {
-    if (disconnect.signal.aborted) return
-    if (timeout.aborted) throw new HttpError(504, 'API 请求超时，请稍后重试。')
+    if (signal.aborted) return
     throw new HttpError(502, '无法连接 API，请检查 URL 和网络。')
   }
 
