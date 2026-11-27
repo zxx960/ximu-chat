@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">西牧对话</title>
+  <defs>
+    <linearGradient id="bubble-gradient" x1="42" y1="26" x2="218" y2="224" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#43b7ff"/>
+      <stop offset="0.52" stop-color="#2388ff"/>
+      <stop offset="1" stop-color="#1164d8"/>
+    </linearGradient>
+  </defs>
+  <rect x="30" y="51" width="196" height="154" rx="50" fill="url(#bubble-gradient)"/>
+  <path d="M78 119h100" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round"/>
+  <path d="M78 159h66" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round" opacity="0.92"/>
+</svg>

@@ -15,6 +15,7 @@ const assets = new Map([
   ['/attachment-limits.mjs', ['public/attachment-limits.mjs', 'text/javascript; charset=utf-8']],
   ['/endpoint.mjs', ['endpoint.mjs', 'text/javascript; charset=utf-8']],
   ['/ximu.svg', ['public/ximu.svg', 'image/svg+xml']],
+  ['/chat-logo.svg', ['public/chat-logo.svg', 'image/svg+xml']],
   ['/ximu-chat-logo.png', ['public/ximu-chat-logo.png', 'image/png']],
   ['/vendor/marked.js', ['node_modules/marked/lib/marked.esm.js', 'text/javascript; charset=utf-8']],
   ['/vendor/purify.js', ['node_modules/dompurify/dist/purify.es.mjs', 'text/javascript; charset=utf-8']],

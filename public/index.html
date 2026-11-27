@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#132720">
+  <meta name="theme-color" content="#1677ff">
   <title>西牧对话</title>
-  <link rel="icon" href="/ximu-chat-logo.png" type="image/png" sizes="256x256">
+  <link rel="icon" href="/chat-logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/styles.css">
   <script type="module" src="/chat.mjs"></script>
 </head>
@@ -38,7 +38,7 @@
         <span class="brand-icon" aria-hidden="true"><span class="logo"></span></span>
         <div><strong>西牧对话</strong><span class="brand-caption">XIMU CHAT</span></div>
       </div>
-      <button type="button" class="new-chat" id="new-chat"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>新建对话</button>
+      <button type="button" class="new-chat" id="new-chat">新建对话</button>
       <div class="history-heading"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><h2>对话历史</h2></div>
       <nav class="history" id="history" aria-label="历史对话"></nav>
       <div class="sidebar-footer">
@@ -114,7 +114,7 @@
         </div>
         <div class="field">
           <label for="api-model">模型名称</label>
-          <input id="api-model" type="text" placeholder="例如 gpt-4o-mini" spellcheck="false" required aria-describedby="model-hint">
+          <input id="api-model" type="text" placeholder="例如 gpt-6.2-sol" spellcheck="false" required aria-describedby="model-hint">
           <p class="field-hint" id="model-hint">填写服务商提供的模型 ID</p>
         </div>
         <button type="submit" class="save-button">保存连接设置</button>
