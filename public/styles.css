@@ -90,6 +90,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
 .message-avatar { display: grid; place-items: center; flex: none; width: 34px; height: 34px; border-radius: 10px; background: #254d3a; color: #d8efc9; }
 .message-avatar .logo { width: 22px; height: 22px; }
 .message-body { min-width: 0; max-width: calc(100% - 46px); overflow-wrap: anywhere; }
+.message-assistant .message-body { flex: 1; }
 .message-user .message-body { max-width: 85%; border: 1px solid #dce8d9; border-radius: 15px 15px 4px 15px; padding: 11px 15px; background: #eaf2e7; }
 .message-label { display: block; margin: 4px 0 7px; font-size: .875rem; font-weight: 700; }
 .message-content { line-height: 1.7; }
