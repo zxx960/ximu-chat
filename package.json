@@ -1,0 +1,17 @@
+{
+  "name": "ximu-chat",
+  "version": "1.0.0",
+  "description": "西牧对话 - 本地 API 聊天工作台",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "dompurify": "^3.5.0",
+    "marked": "^18.3.0"
+  }
+}

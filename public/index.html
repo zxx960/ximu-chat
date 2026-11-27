@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#132720">
+  <title>西牧对话</title>
+  <link rel="icon" href="/ximu-chat-logo.png" type="image/png" sizes="256x256">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/chat.mjs"></script>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l1.4-3.5A7.5 7.5 0 1 1 20 11.5Z"/><path d="M9 11.5h7"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 1.5"/></symbol>
+    <symbol id="i-device" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M9 20h6m-3-4v4"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 6h6m4 0h6M4 12h10m4 0h2M4 18h2m4 0h10"/><circle cx="12" cy="6" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="8" cy="18" r="2"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z"/><circle cx="12" cy="12" r="2.3"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="m4 4 16 16M10 6.2A9 9 0 0 1 12 6c5.5 0 9 6 9 6a15 15 0 0 1-2.5 3M6.3 7.8A15 15 0 0 0 3 12s3.5 6 9 6a8 8 0 0 0 4-.9"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3m-4 4v2"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="m13.5 6.5 4 4M5 19l4-.8 10.2-10.2a1.4 1.4 0 0 0 0-2L18 4.8a1.4 1.4 0 0 0-2 0L5.8 15Z"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 7-5 5 5 5m8-10 5 5-5 5M14 5l-4 14"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 17v-1a3 3 0 0 0-1.1-2.3 6 6 0 1 1 8.2 0A3 3 0 0 0 15 16v1m-6 0h6m-5 3h4"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="m4 4 16 8-16 8 2.8-8L4 4Zm3 8h12"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16m-14 0 1 13h10l1-13M9 7V4h6v3m-5 3v6m4-6v6"/></symbol>
+    <symbol id="i-clip" viewBox="0 0 24 24"><path d="M21.4 11.1l-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 13h8m-8 4h5"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.5"/><path d="m5 17 5-4 3 2 4-5 3 3"/></symbol>
+  </svg>
+
+  <div class="layout" id="layout">
+    <aside class="sidebar" id="sidebar" aria-label="对话历史">
+      <div class="brand">
+        <span class="brand-icon" aria-hidden="true"><span class="logo"></span></span>
+        <div><strong>西牧对话</strong><span class="brand-caption">XIMU CHAT</span></div>
+      </div>
+      <button type="button" class="new-chat" id="new-chat"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>新建对话</button>
+      <div class="history-heading"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><h2>对话历史</h2></div>
+      <nav class="history" id="history" aria-label="历史对话"></nav>
+      <div class="sidebar-footer">
+        <span class="device-icon"><svg class="icon" aria-hidden="true"><use href="#i-device"/></svg></span>
+        <div><strong>本地工作区</strong><span>聊天记录保存在此浏览器</span></div>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <header class="workspace-header">
+        <button type="button" class="icon-button mobile-menu" id="history-toggle" aria-label="对话历史" aria-controls="sidebar" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg></button>
+        <div class="workspace-heading"><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><h1 id="current-title">新建对话</h1></div>
+        <button type="button" class="connection-toggle" id="connection-toggle" aria-controls="connection" aria-expanded="true" aria-label="连接设置">
+          <span class="status-dot" aria-hidden="true"></span><span id="connection-status">未配置连接</span><svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg>
+        </button>
+      </header>
+
+      <div class="chat-scroll" id="chat-scroll">
+        <section class="welcome" id="welcome" aria-labelledby="welcome-title">
+          <div class="hero-symbol" aria-hidden="true">
+            <span class="hero-mark"><span class="logo"></span></span>
+          </div>
+          <h2 id="welcome-title">今天想聊点什么？</h2>
+          <p>连接你的 API，开启一场新的对话。</p>
+          <div class="suggestions" id="suggestions" aria-label="对话示例">
+            <button type="button" class="suggestion" data-prompt="帮我把下面这段话改得更清楚、更自然，同时保留原意："><span class="suggestion-icon mint"><svg class="icon" aria-hidden="true"><use href="#i-pen"/></svg></span><span>润色文字</span></button>
+            <button type="button" class="suggestion" data-prompt="请解释下面这段代码的作用，并指出可以改进的地方："><span class="suggestion-icon lilac"><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg></span><span>解释代码</span></button>
+            <button type="button" class="suggestion" data-prompt="我想集思广益。请针对以下主题给出 5 个有差异的点子："><span class="suggestion-icon sand"><svg class="icon" aria-hidden="true"><use href="#i-bulb"/></svg></span><span>构思点子</span></button>
+          </div>
+        </section>
+        <section class="messages" id="messages" aria-label="聊天消息" hidden></section>
+      </div>
+
+      <div class="composer-area">
+        <div class="chat-error" id="chat-error" hidden>
+          <span role="alert" id="chat-error-text"></span><button type="button" id="retry" hidden>重试</button>
+        </div>
+        <form class="composer" id="composer">
+          <div class="attachment-list draft-attachments" id="draft-attachments" aria-label="待发送附件" hidden></div>
+          <p class="attachment-notice" id="attachment-notice" role="status" hidden></p>
+          <div class="composer-row">
+            <input id="attachment-input" type="file" multiple hidden>
+            <button class="icon-button attach-button" id="attach" type="button" aria-label="添加附件" title="添加附件（PDF、Word、文本或图片）"><svg class="icon" aria-hidden="true"><use href="#i-clip"/></svg></button>
+            <label class="sr-only" for="prompt">输入消息</label>
+            <textarea id="prompt" rows="1" maxlength="300000" placeholder="输入消息，开始对话…"></textarea>
+            <button class="send" id="send" type="submit" title="发送消息" aria-label="发送消息"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+          </div>
+        </form>
+        <div class="composer-hint"><kbd>Enter</kbd> 发送<span class="hint-divider"></span><kbd>Shift + Enter</kbd> 换行</div>
+      </div>
+    </main>
+
+    <aside class="connection" id="connection" aria-labelledby="connection-title">
+      <div class="panel-heading">
+        <div class="panel-icon"><svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg></div>
+        <button class="icon-button close-settings" id="close-settings" type="button" aria-label="关闭连接设置"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+        <h2 id="connection-title">连接设置</h2>
+        <p>配置 OpenAI 兼容接口</p>
+      </div>
+
+      <form class="connection-form" id="connection-form" autocomplete="off" novalidate>
+        <div class="field">
+          <label for="api-url">API URL</label>
+          <input id="api-url" type="url" inputmode="url" value="https://codex.ximuai.com" placeholder="https://api.example.com/v1" spellcheck="false" required aria-describedby="url-hint">
+          <p class="field-hint" id="url-hint">支持基础地址，或包含 /chat/completions、/responses 的完整地址</p>
+        </div>
+        <div class="field">
+          <label for="api-key">API Key</label>
+          <div class="key-field">
+            <input id="api-key" type="password" placeholder="输入你的 API Key" spellcheck="false" autocomplete="off" required>
+            <button class="icon-button key-toggle" id="key-toggle" type="button" aria-label="显示 API Key" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="api-model">模型名称</label>
+          <input id="api-model" type="text" placeholder="例如 gpt-4o-mini" spellcheck="false" required aria-describedby="model-hint">
+          <p class="field-hint" id="model-hint">填写服务商提供的模型 ID</p>
+        </div>
+        <button type="submit" class="save-button">保存连接设置</button>
+        <p class="settings-status" id="settings-status" role="status" hidden></p>
+      </form>
+
+      <div class="privacy-note"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><p>API Key 保存在此浏览器，刷新页面后会自动恢复。</p></div>
+    </aside>
+    <button type="button" class="scrim" id="scrim" aria-label="关闭面板" hidden></button>
+  </div>
+</body>
+</html>
