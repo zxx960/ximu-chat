@@ -16,7 +16,6 @@ const connectionToggle = byId('connection-toggle')
 const scrim = byId('scrim')
 const settingsForm = byId('connection-form')
 const settingsStatus = byId('settings-status')
-const urlInput = byId('api-url')
 const keyInput = byId('api-key')
 const modelInput = byId('api-model')
 const chatScroll = byId('chat-scroll')
@@ -55,7 +54,15 @@ const errors = new Map()
 const drafts = new Map()
 const attachmentDrafts = new Map()
 const savedConfig = storage.read('connection', {})
-urlInput.value = savedConfig.url ?? urlInput.defaultValue
+let apiUrl = 'https://codex.ximuai.com'
+if (savedConfig.url) {
+  try {
+    chatEndpoint(savedConfig.url)
+    apiUrl = savedConfig.url
+  } catch {
+    // Use the default when a previously saved address is invalid.
+  }
+}
 keyInput.value = savedConfig.key ?? ''
 modelInput.value = savedConfig.model ?? ''
 
@@ -192,7 +199,7 @@ function showSettings(show, focus = false) {
   connection.hidden = !show
   syncPanels()
   if (focus) {
-    const next = !show ? connectionToggle : (urlInput.value && !keyInput.value ? keyInput : urlInput)
+    const next = !show ? connectionToggle : (keyInput.value ? modelInput : keyInput)
     next.focus()
   }
 }
@@ -208,7 +215,7 @@ function showSettingsStatus(message, isError = false, input) {
   settingsStatus.hidden = !message
   settingsStatus.textContent = message
   settingsStatus.classList.toggle('error', isError)
-  for (const field of [urlInput, keyInput, modelInput]) field.removeAttribute('aria-invalid')
+  for (const field of [keyInput, modelInput]) field.removeAttribute('aria-invalid')
   if (input) {
     input.setAttribute('aria-invalid', 'true')
     input.focus()
@@ -225,16 +232,13 @@ function applyConnection(settings) {
 settingsForm.addEventListener('input', () => showSettingsStatus(''))
 settingsForm.addEventListener('submit', event => {
   event.preventDefault()
-  const url = urlInput.value.trim()
   const key = keyInput.value.trim()
   const model = modelInput.value.trim()
-  try { chatEndpoint(url) }
-  catch { return showSettingsStatus('请输入有效的 HTTP 或 HTTPS API URL。', true, urlInput) }
   if (!/^[!-~]+$/.test(key)) return showSettingsStatus('请填写 API Key，内部不能有空格。', true, keyInput)
   if (!model) return showSettingsStatus('请填写模型名称。', true, modelInput)
 
-  applyConnection({ url, key, model })
-  const stored = storage.write('connection', { url: new URL(url).search ? '' : url, key, model })
+  applyConnection({ url: apiUrl, key, model })
+  const stored = storage.write('connection', { url: new URL(apiUrl).search ? '' : apiUrl, key, model })
   resetKeyVisibility()
   if (errors.get(currentId)?.setup) errors.delete(currentId)
   renderError()
@@ -269,7 +273,9 @@ document.addEventListener('keydown', event => {
 })
 drawerScreen.addEventListener('change', () => showSettings(!drawerScreen.matches && !config))
 smallScreen.addEventListener('change', () => showHistory(false))
-if (savedConfig.url && savedConfig.key && savedConfig.model) applyConnection(savedConfig)
+if (savedConfig.key && savedConfig.model) {
+  applyConnection({ url: apiUrl, key: savedConfig.key, model: savedConfig.model })
+}
 showSettings(!drawerScreen.matches)
 
 function activeThread() {
@@ -592,7 +598,7 @@ function apiError(status, payload) {
   if (code === 'model_not_found' || code === 'model_not_allowed') return '模型不可用，请检查模型名称和 Key 的权限。'
   if (status === 402 || code === 'insufficient_quota' || code === 'insufficient_balance') return 'API 余额或额度不足，请到服务商查看用量。'
   if (status === 403) return '当前 API Key 没有调用该接口或模型的权限。'
-  if (status === 404) return '接口或模型不存在，请检查 API URL 和模型名称。'
+  if (status === 404) return '接口或模型不存在，请检查模型名称。'
   if (status === 429) return '请求过于频繁或已达到限额，请稍后重试。'
   return typeof details?.message === 'string' ? details.message : `API 请求失败（HTTP ${status}）。`
 }

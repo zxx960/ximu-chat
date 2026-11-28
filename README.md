@@ -1,6 +1,6 @@
 # 西牧chat
 
-本地聊天工作台，可手动填写 OpenAI 兼容 API 地址、API Key 和模型 ID。
+本地聊天工作台，可手动填写 OpenAI 兼容 API 的 API Key 和模型 ID。
 
 ## 启动
 
@@ -21,13 +21,12 @@ npm start
 
 ## 使用
 
-1. 「连接设置」的 API URL 默认填入 `https://codex.ximuai.com`，也可以改成其他基础地址或以 `/chat/completions`、`/responses` 结尾的完整地址。只填域名时使用 `/v1` 作为基础路径。
-2. 填入服务商提供的 API Key 及模型 ID，然后点击「保存连接设置」。
-3. 输入消息并发送。回复生成期间可点「停止生成」。聊天历史可在左侧重新打开或删除。
+1. 在「连接设置」中填入服务商提供的 API Key 和模型 ID，然后点击「保存连接设置」。
+2. 输入消息并发送。回复生成期间可点「停止生成」。聊天历史可在左侧重新打开或删除。
 
-鉴权使用 `Authorization: Bearer <API Key>`。普通聊天默认走 OpenAI 兼容的 Chat Completions，配置完整的 `/responses` 地址可让普通聊天也走 Responses。只要对话中包含原始文档，就会请求同一基础地址下的 `/responses`。两种接口均支持流式和普通 JSON 回复。
+页面沿用当前浏览器中已保存的有效 API 地址，默认使用 `https://codex.ximuai.com`。鉴权使用 `Authorization: Bearer <API Key>`。普通聊天默认走 OpenAI 兼容的 Chat Completions，保存的地址以 `/responses` 结尾时，普通聊天也走 Responses。只要对话中包含原始文档，就会请求同一基础地址下的 `/responses`。两种接口均支持流式和普通 JSON 回复。
 
-API Key、模型名、普通 API URL 和聊天历史保存在当前浏览器。刷新后会恢复连接设置，可以直接继续聊天。带查询参数的 API URL 只在本次页面会话中使用，刷新后需要重新填写该地址。
+API Key、模型名和聊天历史保存在当前浏览器。刷新后会恢复连接设置，可以直接继续聊天。
 
 ## 对话附件
 
